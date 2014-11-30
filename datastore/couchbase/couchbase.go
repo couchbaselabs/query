@@ -297,7 +297,7 @@ func (b *keyspace) refresh() {
 
 	indexes, err := loadViewIndexes(b)
 	if err != nil {
-		logging.Errorf(" Error loading indexes for bucket %s", b.name)
+		logging.Errorf(" Error loading view indexes for bucket %s", b.name)
 		return
 	}
 
@@ -305,12 +305,21 @@ func (b *keyspace) refresh() {
 		return
 	}
 
+	indexes2i, err := load2iIndexes(b)
+	if err != nil {
+		logging.Errorf(" Error loading 2i indexes for bucket %s", b.name)
+		return
+	}
+	if len(indexes2i) == 0 {
+		return
+	}
+	indexes = append(indexes, indexes2i...)
+
 	for _, index := range indexes {
 		logging.Infof("Found index %s  on keyspace %s", (*index).Name(), b.name)
 		name := (*index).Name()
 		b.indexes[name] = *index
 	}
-
 }
 
 func keepIndexesFresh(b *keyspace) {
@@ -511,16 +520,15 @@ func (b *keyspace) CreatePrimaryIndex(using datastore.IndexType) (datastore.Prim
 		b.indexes[idx.Name()] = idx
 		return idx, nil
 
-		/*
-			case datastore.LSM:
-				idx, err := new2iPrimaryIndex(b, using)
-				if err != nil {
-					return nil, errors.NewError(err, "Error creating primary index")
-				}
-				logging.Debugf("Created Primary 2i index `%s`", idx.Name())
-				b.indexes[idx.Name()] = idx
-				return idx, nil
-		*/
+	case datastore.LSM:
+		idx, err := create2iPrimaryIndex(b, using)
+		if err != nil {
+			return nil, errors.NewError(err, "Error creating primary index")
+		}
+		logging.Debugf("Created Primary 2i index `%s`", idx.Name())
+		b.indexes[idx.Name()] = idx
+		return idx, nil
+
 	default:
 		return nil, errors.NewError(nil, "Not yet implemented.")
 	}
@@ -554,16 +562,15 @@ func (b *keyspace) CreateIndex(name string, equalKey, rangeKey expression.Expres
 		b.indexes[idx.Name()] = idx
 		return idx, nil
 
-		/*
-			case datastore.LSM:
-				idx, err := new2iIndex(name, equalKey, rangeKey, where, using, b)
-				if err != nil {
-					return nil, errors.NewError(err, fmt.Sprintf("Error creating index: %s", name))
-				}
-				logging.Debugf("Created 2i index `%s`", idx.Name())
-				b.indexes[idx.Name()] = idx
-				return idx, nil
-		*/
+	case datastore.LSM:
+		idx, err := create2iIndex(name, equalKey, rangeKey, where, using, b)
+		if err != nil {
+			return nil, errors.NewError(err, fmt.Sprintf("Error creating index: %s", name))
+		}
+		logging.Debugf("Created 2i index `%s`", idx.Name())
+		b.indexes[idx.Name()] = idx
+		return idx, nil
+
 	default:
 		return nil, errors.NewError(nil, "Not yet implemented.")
 	}
@@ -737,14 +744,15 @@ func (b *keyspace) Release() {
 }
 
 func (b *keyspace) loadIndexes() (err errors.Error) {
-	if err1 := b.loadViewIndexes(); err1 != nil {
-		err = err1
-	}
-	/*
-		if err2 := b.load2iIndexes(); err2 != nil {
-			err = err2
+	if err = b.loadViewIndexes(); err == nil {
+		indexes, err := load2iIndexes(b)
+		if err == nil {
+			for _, index := range indexes {
+				idx := *index
+				b.indexes[idx.Name()] = idx
+			}
 		}
-	*/
+	}
 	return
 }
 
