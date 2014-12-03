@@ -131,3 +131,13 @@ func GetKeyspace(namespace, keyspace string) (Keyspace, error) {
 
 // Credentials
 type Credentials []*url.Userinfo
+
+type Privileges int
+
+const (
+	CAN_READ  Privileges = 1
+	CAN_WRITE Privileges = 2
+	CAN_DDL   Privileges = 4
+)
+
+type PrivilegesMap map[string]Privileges
