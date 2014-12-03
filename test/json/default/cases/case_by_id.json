@@ -21,6 +21,10 @@
                                 "#operator": "Sequence",
                                 "~children": [
                                     {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
+                                    {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
                                         "namespace": "default"
@@ -81,6 +85,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
@@ -149,6 +157,10 @@
                                 "#operator": "Sequence",
                                 "~children": [
                                     {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
+                                    {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
                                         "namespace": "default"
@@ -187,11 +199,11 @@
             ]
         }
     ]
-    },
+        },
     {
         "description": "query with WHERE clause matches multiple IDs joined by OR should not scan",
         "statements": "EXPLAIN SELECT * FROM default:game WHERE META(game).id = \"damien\" OR META(game).id = \"dustin\" OR META(game).id = \"junyi\" ORDER BY id",
-          "results": [
+        "results": [
         {
             "#operator": "Sequence",
             "~children": [
@@ -209,6 +221,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
@@ -248,7 +264,7 @@
             ]
         }
     ]
-    },
+           },
     {
         "description": "query with WHERE clause matches multiple IDs (some non-existant) joined by OR should not give error",
         "statements": "SELECT META(game).id FROM default:game WHERE META(game).id = \"damien\" OR META(game).id = \"dustin\" OR META(game).id = \"does_not_exist\" ORDER BY id",
@@ -264,7 +280,7 @@
     {
         "description": "query with WHERE clause using OR but not only ID comparisons should scan",
         "statements": "EXPLAIN SELECT * FROM default:game WHERE META(game).id = \"damien\" OR name = \"foo\" ORDER BY id",
-         "results": [
+        "results": [
         {
             "#operator": "Sequence",
             "~children": [
@@ -282,6 +298,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
@@ -343,6 +363,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
@@ -417,6 +441,10 @@
                                 "#operator": "Sequence",
                                 "~children": [
                                     {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
+                                    {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
                                         "namespace": "default"
@@ -466,6 +494,10 @@
                 {
                     "#operator": "Sequence",
                     "~children": [
+                        {
+                            "#operator": "Authenticate",
+                            "keyspace": "game"
+                        },
                         {
                             "#operator": "CountScan",
                             "keyspace": "game",
@@ -542,7 +574,7 @@
                 }
             ]
         }
-    ]   
+    ]
    },
    {
         "description": "query with COUNT(*) and anything else should perform scan",
@@ -565,6 +597,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",
@@ -648,7 +684,7 @@
    {
         "description": "query with COUNT(*) with WHERE clause should perform scan",
         "statements": "EXPLAIN SELECT COUNT(*) as c FROM default:game WHERE score > 5 ORDER BY c ",
-         "results": [
+        "results": [
         {
             "#operator": "Sequence",
             "~children": [
@@ -666,6 +702,10 @@
                             "~child": {
                                 "#operator": "Sequence",
                                 "~children": [
+                                    {
+                                        "#operator": "Authenticate",
+                                        "keyspace": "game"
+                                    },
                                     {
                                         "#operator": "Fetch",
                                         "keyspace": "game",

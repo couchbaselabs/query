@@ -27,6 +27,10 @@ func (this *builder) VisitUpdate(stmt *algebra.Update) (interface{}, error) {
 		return nil, err
 	}
 
+	creds := this.Credentials()
+	auth := NewAuthenticate(keyspace, creds)
+	this.subChildren = append(this.subChildren, auth)
+
 	subChildren := this.subChildren
 	subChildren = append(subChildren, NewClone())
 
