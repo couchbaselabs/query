@@ -27,6 +27,10 @@ func (this *builder) VisitDelete(stmt *algebra.Delete) (interface{}, error) {
 		return nil, err
 	}
 
+	creds := this.Credentials()
+	auth := NewAuthenticate(keyspace, creds)
+	this.subChildren = append(this.subChildren, auth)
+
 	subChildren := this.subChildren
 	subChildren = append(subChildren, NewSendDelete(keyspace))
 

@@ -55,6 +55,10 @@ func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
 		return nil, err
 	}
 
+	creds := this.Credentials()
+	auth := NewAuthenticate(keyspace, creds)
+	this.subChildren = append(this.subChildren, auth)
+
 	actions := stmt.Actions()
 	var update, delete, insert Operator
 
@@ -62,6 +66,7 @@ func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
 		act := actions.Update()
 		ops := make([]Operator, 0, 5)
 
+		ops = append(ops, auth)
 		if act.Where() != nil {
 			ops = append(ops, NewFilter(act.Where()))
 		}
@@ -84,6 +89,7 @@ func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
 		act := actions.Delete()
 		ops := make([]Operator, 0, 4)
 
+		ops = append(ops, auth)
 		if act.Where() != nil {
 			ops = append(ops, NewFilter(act.Where()))
 		}
@@ -96,6 +102,7 @@ func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
 		act := actions.Insert()
 		ops := make([]Operator, 0, 4)
 
+		ops = append(ops, auth)
 		if act.Where() != nil {
 			ops = append(ops, NewFilter(act.Where()))
 		}

@@ -26,6 +26,7 @@ import (
 	"github.com/couchbaselabs/query/errors"
 	"github.com/couchbaselabs/query/expression"
 	"github.com/couchbaselabs/query/value"
+	"net/url"
 )
 
 // log channel for the datastore lifecycle
@@ -85,6 +86,9 @@ type Keyspace interface {
 	Upsert(upserts []Pair) ([]Pair, errors.Error) // Bulk key-value upserts into this keyspace
 	Delete(deletes []string) errors.Error         // Bulk key-value deletes from this keyspace
 
+	// Bucket Authentication
+	Authenticate(credentials Credentials) errors.Error
+
 	Release() // Release any query engine resources held by this object
 }
 
@@ -99,3 +103,6 @@ type AnnotatedPair struct {
 	Key   string
 	Value value.AnnotatedValue
 }
+
+// Credentials
+type Credentials []*url.Userinfo
