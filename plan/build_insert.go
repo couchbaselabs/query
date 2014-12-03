@@ -40,6 +40,11 @@ func (this *builder) VisitInsert(stmt *algebra.Insert) (interface{}, error) {
 	}
 
 	subChildren := make([]Operator, 0, 4)
+
+	creds := this.Credentials()
+	auth := NewAuthenticate(keyspace, creds)
+	subChildren = append(subChildren, auth)
+
 	subChildren = append(subChildren, NewSendInsert(keyspace, stmt.Key()))
 
 	if stmt.Returning() != nil {

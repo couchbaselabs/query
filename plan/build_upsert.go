@@ -26,6 +26,10 @@ func (this *builder) VisitUpsert(stmt *algebra.Upsert) (interface{}, error) {
 
 	children := make([]Operator, 0, 4)
 
+	creds := this.Credentials()
+	auth := NewAuthenticate(keyspace, creds)
+	children = append(this.children, auth)
+
 	if stmt.Values() != nil {
 		children = append(children, NewValueScan(stmt.Values()))
 	} else if stmt.Select() != nil {
