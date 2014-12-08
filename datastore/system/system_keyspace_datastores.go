@@ -89,7 +89,7 @@ func (b *storeKeyspace) Indexes() ([]datastore.Index, errors.Error) {
 	return rv, nil
 }
 
-func (b *storeKeyspace) Authenticate(credentials datastore.Credentials) errors.Error {
+func (b *storeKeyspace) Authenticate(credentials datastore.Credentials, requested datastore.Privileges) errors.Error {
 	return nil
 }
 

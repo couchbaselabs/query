@@ -90,7 +90,7 @@ type Keyspace interface {
 	Delete(deletes []string) errors.Error         // Bulk key-value deletes from this keyspace
 
 	// Bucket Authentication
-	Authenticate(credentials Credentials) errors.Error
+	Authenticate(credentials Credentials, requested Privileges) errors.Error
 
 	Release() // Release any query engine resources held by this object
 }

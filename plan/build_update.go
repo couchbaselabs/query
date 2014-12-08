@@ -11,6 +11,7 @@ package plan
 
 import (
 	"github.com/couchbaselabs/query/algebra"
+	"github.com/couchbaselabs/query/datastore"
 )
 
 func (this *builder) VisitUpdate(stmt *algebra.Update) (interface{}, error) {
@@ -28,7 +29,7 @@ func (this *builder) VisitUpdate(stmt *algebra.Update) (interface{}, error) {
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_WRITE)
 	this.subChildren = append(this.subChildren, auth)
 
 	subChildren := this.subChildren

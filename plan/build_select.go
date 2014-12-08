@@ -14,6 +14,7 @@ import (
 	"sort"
 
 	"github.com/couchbaselabs/query/algebra"
+	"github.com/couchbaselabs/query/datastore"
 	"github.com/couchbaselabs/query/errors"
 	"github.com/couchbaselabs/query/expression"
 )
@@ -220,7 +221,7 @@ func (this *builder) VisitKeyspaceTerm(node *algebra.KeyspaceTerm) (interface{},
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_READ)
 	this.subChildren = append(this.subChildren, auth)
 
 	if node.Keys() != nil {
@@ -265,7 +266,7 @@ func (this *builder) VisitJoin(node *algebra.Join) (interface{}, error) {
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_READ)
 	this.subChildren = append(this.subChildren, auth)
 
 	join := NewJoin(keyspace, node)
@@ -293,7 +294,7 @@ func (this *builder) VisitNest(node *algebra.Nest) (interface{}, error) {
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_READ)
 	this.subChildren = append(this.subChildren, auth)
 
 	nest := NewNest(keyspace, node)
@@ -484,7 +485,7 @@ func (this *builder) fastCount(node *algebra.Subselect) (bool, error) {
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_READ)
 	this.children = append(this.children, auth)
 
 	scan := NewCountScan(keyspace, from)

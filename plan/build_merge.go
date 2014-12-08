@@ -13,6 +13,7 @@ import (
 	"fmt"
 
 	"github.com/couchbaselabs/query/algebra"
+	"github.com/couchbaselabs/query/datastore"
 )
 
 func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
@@ -56,7 +57,7 @@ func (this *builder) VisitMerge(stmt *algebra.Merge) (interface{}, error) {
 	}
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_WRITE)
 	this.subChildren = append(this.subChildren, auth)
 
 	actions := stmt.Actions()

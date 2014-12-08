@@ -18,17 +18,30 @@ type Authenticate struct {
 	readonly
 	keyspace    datastore.Keyspace
 	credentials datastore.Credentials
+	privilege   datastore.Privileges
 }
 
-func NewAuthenticate(keyspace datastore.Keyspace, creds datastore.Credentials) *Authenticate {
+func NewAuthenticate(keyspace datastore.Keyspace, creds datastore.Credentials, priv datastore.Privileges) *Authenticate {
 	return &Authenticate{
 		keyspace:    keyspace,
 		credentials: creds,
+		privilege:   priv,
 	}
 }
 
 func (this *Authenticate) Accept(visitor Visitor) (interface{}, error) {
 	return visitor.VisitAuthenticate(this)
+}
+
+func privToStr(priv datastore.Privileges) string {
+	if (priv & datastore.CAN_DDL) != 0 {
+		return "PRIV_DDL"
+	} else if (priv & datastore.CAN_WRITE) != 0 {
+		return "PRIV_WRITE"
+	} else if (priv & datastore.CAN_READ) != 0 {
+		return "PRIV_READ"
+	}
+	return "Invalid Priv"
 }
 
 func (this *Authenticate) MarshalJSON() ([]byte, error) {
@@ -43,6 +56,7 @@ func (this *Authenticate) MarshalJSON() ([]byte, error) {
 
 		r["credentials"] = q
 	}
+	r["privilege"] = privToStr(this.privilege)
 	return json.Marshal(r)
 }
 
@@ -50,6 +64,10 @@ func (this *Authenticate) Keyspace() datastore.Keyspace {
 	return this.keyspace
 }
 
-func (this *Authenticate) GetCredentials() datastore.Credentials {
+func (this *Authenticate) Credentials() datastore.Credentials {
 	return this.credentials
+}
+
+func (this *Authenticate) Privilege() datastore.Privileges {
+	return this.privilege
 }
