@@ -276,7 +276,7 @@ func (b *keyspace) Indexes() ([]datastore.Index, errors.Error) {
 	return rv, nil
 }
 
-func (b *keyspace) Authenticate(credentials datastore.Credentials) errors.Error {
+func (b *keyspace) Authenticate(credentials datastore.Credentials, requested datastore.Privileges) errors.Error {
 	return nil
 }
 

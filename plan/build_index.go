@@ -20,7 +20,7 @@ import (
 func (this *builder) BuildAuthPlan(keyspace datastore.Keyspace) interface{} {
 	creds := this.Credentials()
 	children := make([]Operator, 0, 2)
-	return append(children, NewAuthenticate(keyspace, creds))
+	return append(children, NewAuthenticate(keyspace, creds, datastore.CAN_DDL))
 
 }
 

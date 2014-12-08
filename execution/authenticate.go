@@ -45,8 +45,9 @@ func (this *Authenticate) RunOnce(context *Context, parent value.Value) {
 
 func (this *Authenticate) beforeItems(context *Context, parent value.Value) bool {
 
-	credentials := this.plan.GetCredentials()
-	err := this.plan.Keyspace().Authenticate(credentials)
+	credentials := this.plan.Credentials()
+	privilege := this.plan.Privilege()
+	err := this.plan.Keyspace().Authenticate(credentials, privilege)
 	if err != nil {
 		context.Error(errors.NewError(err, "Authentication Failed"))
 		return false

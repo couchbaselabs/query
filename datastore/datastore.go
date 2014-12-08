@@ -90,7 +90,7 @@ type Keyspace interface {
 	Delete(deletes []string) errors.Error         // Bulk key-value deletes from this keyspace
 
 	// Bucket Authentication
-	Authenticate(credentials Credentials) errors.Error
+	Authenticate(credentials Credentials, requested Privileges) errors.Error
 
 	Release() // Release any query engine resources held by this object
 }
@@ -109,3 +109,13 @@ type AnnotatedPair struct {
 
 // Credentials
 type Credentials []*url.Userinfo
+
+type Privileges int
+
+const (
+	CAN_READ  Privileges = 1
+	CAN_WRITE Privileges = 2
+	CAN_DDL   Privileges = 4
+)
+
+type PrivilegesMap map[string]Privileges

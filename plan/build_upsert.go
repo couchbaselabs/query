@@ -13,6 +13,7 @@ import (
 	"fmt"
 
 	"github.com/couchbaselabs/query/algebra"
+	"github.com/couchbaselabs/query/datastore"
 )
 
 func (this *builder) VisitUpsert(stmt *algebra.Upsert) (interface{}, error) {
@@ -27,7 +28,7 @@ func (this *builder) VisitUpsert(stmt *algebra.Upsert) (interface{}, error) {
 	children := make([]Operator, 0, 4)
 
 	creds := this.Credentials()
-	auth := NewAuthenticate(keyspace, creds)
+	auth := NewAuthenticate(keyspace, creds, datastore.CAN_WRITE)
 	children = append(this.children, auth)
 
 	if stmt.Values() != nil {
