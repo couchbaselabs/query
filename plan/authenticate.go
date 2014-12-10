@@ -29,6 +29,10 @@ func NewAuthenticate(keyspace datastore.Keyspace, creds datastore.Credentials, p
 	}
 }
 
+func (this *Authenticate) New() Operator {
+	return &Authenticate{}
+}
+
 func (this *Authenticate) Accept(visitor Visitor) (interface{}, error) {
 	return visitor.VisitAuthenticate(this)
 }
