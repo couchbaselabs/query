@@ -1,13 +1,13 @@
-# N1QL DP4 Feature Status
+# N1QL Feature Status
 
 * Status: DRAFT
 * Latest: [dp4-feature-status](https://github.com/couchbaselabs/query/blob/master/docs/dp4-feature-status.md)
-* Modified: 2014-12-22
+* Modified: 2015-2-16
 
 ## Introduction
 
-This document specifies the features of N1QL DP4 and their current
-status for QE.
+This document specifies the features of N1QL DP4 and Sherlock, and
+their current status for QE.
 
 The document also indicates the status of features with respect to
 Couchbase datastore and file-based datastore.
@@ -109,8 +109,6 @@ spec](https://github.com/couchbaselabs/query/blob/master/docs/n1ql-dml.md).
 
 + DROP PRIMARY INDEX
 
-+ ALTER INDEX
-
 + INSERT
 
 + UPSERT
@@ -196,7 +194,7 @@ Secondary indexes will be integrated in the coming weeks.
 
 ### ALTER INDEX
 
-ALTER INDEX is currently not in scope for DP4 or Sherlock.
+ALTER INDEX is __not__ in scope for DP4 or Sherlock.
 
 ### INSERT
 
@@ -224,6 +222,44 @@ MERGE is implemented and testable for Couchbase and file-based
 datastores. The current implementation is known to cause a crash See
 [MB-12327](http://www.couchbase.com/issues/browse/MB-12327).
 
+## Additional features for Sherlock
+
+### Secondary indexes
+
+All index operations will be supported on GSI indexes, in addition to
+view indexes.
+
++ CREATE PRIMARY INDEX
++ CREATE INDEX
++ DROP INDEX
++ SELECT * FROM system:indexes
+
+### Indexing hints
+
+Product Management has requested index hints that allow users to
+specify which index will be used. See MB-12219.
+
+### SASL buckets
+
+SASL buckets are supported in Sherlock. Every query and every type of
+statement can access both SASL and non-SASL buckets. Also, a single
+statement that contains JOINs or subqueries can access any combination
+of multiple SASL and non-SASL buckets.
+
+### Subqueries in FROM clause
+
+Based on user feedback, we have added the ability to have subqueries
+in a FROM clause. A subquery in a FROM clause may or may not have a
+USE KEYS clause. In this case, the USE KEYS clause is optional.
+
+### Output formats
+
+The output formats should be fairly stable now. This applies to
+results, signatures, EXPLAIN, REST API, and other responses.
+
+The error messages have also been designed and are being implemented
+and stabilized.
+
 ## About this Document
 
 ### Document History
@@ -232,4 +268,7 @@ datastores. The current implementation is known to cause a crash See
 * 2014-11-24 - Delivery dates
     * New dates for implementing INSERT and UPSERT
 * 2014-12-22 - INSERT and UPSERT
-    * Implemented new syntax for INSERT and UPSERT
+    * Implemente new syntax for INSERT and UPSERT
+* 2015-2-16 - Sherlock
+    * Update feature status for Sherlock
+    * Remove ALTER INDEX
