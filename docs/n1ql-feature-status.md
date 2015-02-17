@@ -2,7 +2,7 @@
 
 * Status: DRAFT
 * Latest: [dp4-feature-status](https://github.com/couchbaselabs/query/blob/master/docs/dp4-feature-status.md)
-* Modified: 2015-2-16
+* Modified: 2015-2-17
 
 ## Introduction
 
@@ -127,6 +127,17 @@ The REST API is defined at [Query REST
 API](https://docs.google.com/document/d/1Uyv4t06DNGq7TxJjGI_T_MbbEYf8Er-imC7yzTY0uZw/edit#heading=h.lfqenz86v2rl). It
 is 80% implemented, and should be fully implemented and testable by
 11/20/2014.
+
+The REST API document includes:
+
++ Endpoint URLs
++ request and response formats
++ result signatures
++ result metrics
++ error formats
++ __scan consistency__ settings
++ prepared statements
++ parameters
 
 ### Expressions
 
@@ -268,7 +279,9 @@ and stabilized.
 * 2014-11-24 - Delivery dates
     * New dates for implementing INSERT and UPSERT
 * 2014-12-22 - INSERT and UPSERT
-    * Implemente new syntax for INSERT and UPSERT
+    * Implement new syntax for INSERT and UPSERT
 * 2015-2-16 - Sherlock
     * Update feature status for Sherlock
     * Remove ALTER INDEX
+* 2015-2-17 - Scan consistency
+    * Add mention of scan consistency
